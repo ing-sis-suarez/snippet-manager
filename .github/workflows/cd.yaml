@@ -39,4 +39,4 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/ing-sis-org/code-snippets:latest
+            ghcr.io/ing-sis-org/snippet-manager:latest
