@@ -1,4 +1,4 @@
-package printscript.snippetmanager.domains.schema
+package printscript.snippetmanager.domains.snippets.schema
 
 class Snippet {
 }
