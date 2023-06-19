@@ -1,11 +1,11 @@
-package printscript.snippetmanager
+package ingsis.snippetmanager
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class SnippetManagerApplication
+class SnippetShareApplication
 
 fun main(args: Array<String>) {
-    runApplication<SnippetManagerApplication>(*args)
+	runApplication<SnippetShareApplication>(*args)
 }
