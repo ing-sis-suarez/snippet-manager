@@ -42,4 +42,3 @@ jobs:
           push: true
           tags: |
             ghcr.io/ing-sis-org/snippet-manager:latest
-          file: docker-compose.dev.yml
