@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class SnippetShareApplication
+class SnippetManagerApplication
 
 fun main(args: Array<String>) {
-	runApplication<SnippetShareApplication>(*args)
+	runApplication<SnippetManagerApplication>(*args)
 }

@@ -16,6 +16,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: prod
 
       - name: Authorize gradlew script
         run: chmod +x ./gradlew
