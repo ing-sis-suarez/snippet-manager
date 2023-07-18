@@ -24,8 +24,8 @@ class SecurityConfig {
         This is where we configure the security required for our endpoints and setup our app to serve as
         an OAuth2 Resource Server, using JWT validation.
         */
-        return http.authorizeHttpRequests {
-            it.requestMatchers("/**").authenticated()
+        return http.authorizeRequests { requests ->
+            requests.antMatchers("/**").authenticated()
         }
             .cors().and()
             .csrf().disable()
@@ -34,6 +34,7 @@ class SecurityConfig {
             }
             .build()
     }
+
 
     @Bean
     fun jwtDecoder(): JwtDecoder {
