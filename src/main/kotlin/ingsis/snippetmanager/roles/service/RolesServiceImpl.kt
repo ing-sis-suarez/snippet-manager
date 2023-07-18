@@ -31,6 +31,7 @@ class RolesServiceImpl: RolesService {
         try {
             return template.exchange(url, HttpMethod.POST, requestEntity, UUID::class.java)
         } catch (e: HttpClientErrorException) {
+            println(e.message)
             throw HTTPError(e.message ?: "", e.statusCode)
         }
     }
@@ -44,6 +45,7 @@ class RolesServiceImpl: RolesService {
         try {
             return template.exchange(url, HttpMethod.GET, requestEntity, UserRolesResponseDTO::class.java)
         } catch (e: HttpClientErrorException) {
+            println(e.message)
             throw HTTPError(e.message ?: "", e.statusCode)
         }
     }
@@ -58,6 +60,7 @@ class RolesServiceImpl: RolesService {
         try {
             return template.exchange(url, HttpMethod.DELETE, requestEntity, Boolean::class.java)
         } catch (e: HttpClientErrorException) {
+            println(e.message)
             throw HTTPError(e.message ?: "", e.statusCode)
         }
     }
