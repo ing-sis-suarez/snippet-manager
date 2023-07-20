@@ -2,7 +2,7 @@ name: "Continuous Deployment"
 on:
   push:
     branches:
-      - dev
+      - prod
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: dev
+          ref: prod
 
       - name: Authorize gradlew script
         run: chmod +x ./gradlew
@@ -48,4 +48,4 @@ jobs:
             "TOKEN=${{ secrets.TOKEN }}"
           push: true
           tags: |
-            ghcr.io/ing-sis-org/snippet-manager-dev:latest
+            ghcr.io/ing-sis-org/snippet-manager-prod:latest
