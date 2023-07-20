@@ -39,6 +39,9 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v4
         with:
+          build-args: |
+            "USERNAME=${{ secrets.USERNAME }}"
+            "TOKEN=${{ secrets.TOKEN }}"
           push: true
           tags: |
             ghcr.io/ing-sis-org/snippet-manager-dev:latest

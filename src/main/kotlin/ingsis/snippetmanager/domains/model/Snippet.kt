@@ -1,6 +1,7 @@
-package ingsis.snippetmanager.model
+package ingsis.snippetmanager.domains.model
 
-import ingsis.snippetmanager.domains.manager.dto.SnippetCreateRequestDTO
+import ingsis.snippetmanager.domains.snippets.dto.SnippetDataRequestDTO
+import ingsis.snippetmanager.domains.snippets.dto.UpdateSnippetDTO
 import java.util.*
 import javax.persistence.*
 
@@ -28,10 +29,16 @@ class Snippet {
     var createdAt: Date? = Date()
 
 
-    constructor(createDTO: SnippetCreateRequestDTO) {
+    constructor(createDTO: SnippetDataRequestDTO) {
         this.title = createDTO.name
         this.content = createDTO.content
         this.language = createDTO.type
     }
 
+    fun update(updateDTO: UpdateSnippetDTO) {
+        this.title = updateDTO.name
+        this.content = updateDTO.content
+        this.language = updateDTO.type
+        updateDTO.compliance?.let { this.compliance = it }
+    }
 }

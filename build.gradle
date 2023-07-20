@@ -17,9 +17,20 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "Spring-mvc-redis-streams"
+        url = uri("https://maven.pkg.github.com/Snippet-Searcher/spring-mvc-redis-streams")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
 }
 
 dependencies {
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    implementation "spring-mvc-redis-streams:lib:0.0.1-SNAPSHOT"
     implementation 'org.springframework.metrics:spring-metrics:0.5.1.RELEASE'
     implementation 'com.netflix.spectator:spectator-api:0.55.0'
     implementation 'org.springframework:spring-aspects'

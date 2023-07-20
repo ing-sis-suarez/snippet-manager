@@ -1,8 +1,9 @@
-package ingsis.snippetmanager.domains.manager.controller
+package ingsis.snippetmanager.domains.snippets.controller
 
-import ingsis.snippetmanager.domains.manager.dto.SnippetCreateRequestDTO
-import ingsis.snippetmanager.domains.manager.dto.SnippetResponseDTO
-import ingsis.snippetmanager.domains.manager.service.SnippetService
+import ingsis.snippetmanager.domains.snippets.dto.SnippetDataRequestDTO
+import ingsis.snippetmanager.domains.snippets.dto.SnippetResponseDTO
+import ingsis.snippetmanager.domains.snippets.dto.UpdateSnippetDTO
+import ingsis.snippetmanager.domains.snippets.service.SnippetService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,8 +26,8 @@ class SnippetController {
     @PostMapping("/snippet")
     fun createSnippet(
         @RequestHeader("Authorization") token: String,
-        principal: Principal,
-        @RequestBody snippet: SnippetCreateRequestDTO
+        @RequestBody snippet: SnippetDataRequestDTO,
+        principal: Principal
     ): ResponseEntity<UUID> {
         return ResponseEntity(snippetService.createSnippet(snippet, principal.name, token), HttpStatus.CREATED)
     }
@@ -37,6 +38,17 @@ class SnippetController {
         @RequestHeader("Authorization") token: String
     ): ResponseEntity<SnippetResponseDTO> {
         return ResponseEntity(snippetService.getSnippet(id, token), HttpStatus.OK)
+    }
+
+
+    @PutMapping("/snippet/{id}")
+    fun updateSnippet(
+        @PathVariable id: UUID,
+        @RequestHeader("Authorization") token: String,
+        @RequestBody snippet: UpdateSnippetDTO,
+        principal: Principal
+    ): ResponseEntity<SnippetResponseDTO> {
+        return ResponseEntity(snippetService.updateSnippet(id, snippet, principal.name, token), HttpStatus.OK)
     }
 
     @DeleteMapping("/snippet/{id}")

@@ -1,5 +1,6 @@
-package ingsis.snippetmanager.model
+package ingsis.snippetmanager.domains.model
 
+import ingsis.snippetmanager.domains.format_rules.dto.FormaterRulesDTO
 import java.util.*
 import javax.persistence.*
 
@@ -19,4 +20,13 @@ class FormaterRules {
 
     @Column(name = "max_line_length", nullable = false)
     var maxLineLength: Int? = 80
+
+
+    constructor() {}
+
+    fun update(dto: FormaterRulesDTO) {
+        this.spacesBetweenTokens = dto.spacesBetweenTokens
+        this.indentation = dto.indentation
+        this.maxLineLength = dto.maxLineLength
+    }
 }
