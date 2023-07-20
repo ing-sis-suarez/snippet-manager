@@ -8,7 +8,8 @@ import java.util.*
 
 interface SnippetService {
 
-
+    fun getReadableSnippets(token: String): List<SnippetResponseDTO>
+    fun getOwnedSnippets(token: String): List<SnippetResponseDTO>
     fun setAllToPending(ids: List<UUID>)
     fun createSnippet(dto: SnippetDataRequestDTO, userId: String, token: String): SnippetCreationResponseDTO
 

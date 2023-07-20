@@ -7,6 +7,7 @@ import java.util.*
 
 interface RolesService {
 
+
     fun createResource(
         userId: String,
         resourceType: String,
@@ -14,7 +15,7 @@ interface RolesService {
         token: String
     ): ResponseEntity<UUID>
 
-    fun getResourcesByOwner(token: String, resourceType: String): ResponseEntity<IdList>
+    fun getResourcesByRole(token: String, resourceType: String, role: String): ResponseEntity<IdList>
 
     fun getResourceIfExistsByOwnerAndResourceType(
         resourceType: String,

@@ -1,6 +1,7 @@
 package ingsis.snippetmanager.domains.model
 
 import ingsis.snippetmanager.domains.snippets.dto.SnippetDataRequestDTO
+import ingsis.snippetmanager.domains.snippets.dto.SnippetResponseDTO
 import ingsis.snippetmanager.domains.snippets.dto.UpdateSnippetDTO
 import java.util.*
 import javax.persistence.*
@@ -40,5 +41,16 @@ class Snippet {
         this.content = updateDTO.content
         this.language = updateDTO.type
         updateDTO.compliance?.let { this.compliance = it }
+    }
+
+    fun toSnippetResponseDTO(): SnippetResponseDTO {
+        return SnippetResponseDTO(
+            this.id!!,
+            this.title!!,
+            this.content!!,
+            this.createdAt!!,
+            this.language!!,
+            this.compliance!!
+        )
     }
 }

@@ -33,6 +33,22 @@ class SnippetController {
         return ResponseEntity(snippetService.createSnippet(snippet, principal.name, token), HttpStatus.CREATED)
     }
 
+    @GetMapping("/owned-snippets")
+    fun getOwnedSnippets(
+        @RequestHeader("Authorization") token: String,
+        principal: Principal
+    ): ResponseEntity<List<SnippetResponseDTO>> {
+        return ResponseEntity(snippetService.getOwnedSnippets(token), HttpStatus.OK)
+    }
+
+    @GetMapping("/readable-snippets")
+    fun getReadableSnippets(
+        @RequestHeader("Authorization") token: String,
+        principal: Principal
+    ): ResponseEntity<List<SnippetResponseDTO>> {
+        return ResponseEntity(snippetService.getReadableSnippets(token), HttpStatus.OK)
+    }
+
     @GetMapping("/snippet/{id}")
     fun getSnippet(
         @PathVariable id: UUID,

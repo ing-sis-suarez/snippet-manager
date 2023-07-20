@@ -45,6 +45,34 @@ class SnippetServiceImpl : SnippetService {
         this.formaterRulesService = formaterRulesService
     }
 
+    override fun getReadableSnippets(token: String): List<SnippetResponseDTO> {
+        val readable = rolesService.getResourcesByRole(token, "snippet", "read").body!!.ids
+        val owned = rolesService.getResourcesByRole(token, "snippet", "owner").body!!.ids
+        val onlyReadable = readable.filter { id -> !owned.contains(id) }
+        val snippets = snippetRepository.findAllById(onlyReadable)
+        return snippets.map { snippet -> SnippetResponseDTO(
+            snippet.id!!,
+            snippet.title!!,
+            snippet.content!!,
+            snippet.createdAt!!,
+            snippet.language!!,
+            snippet.compliance!!
+        ) }
+    }
+
+    override fun getOwnedSnippets(token: String): List<SnippetResponseDTO> {
+        val response = rolesService.getResourcesByRole(token, "snippet", "owner")
+        val snippets = snippetRepository.findAllById(response.body!!.ids)
+        return snippets.map { snippet -> SnippetResponseDTO(
+            snippet.id!!,
+            snippet.title!!,
+            snippet.content!!,
+            snippet.createdAt!!,
+            snippet.language!!,
+            snippet.compliance!!
+        ) }
+    }
+
     override fun setAllToPending(ids: List<UUID>) {
         val snippets = snippetRepository.findAllById(ids)
         val pendingSnippets = snippets.map { snippet ->
@@ -64,7 +92,7 @@ class SnippetServiceImpl : SnippetService {
         val savedSnippet = snippetRepository.save(snippet)
         val response = rolesService.createResource(userId, "snippet", savedSnippet.id!!, token)
         if (response.statusCode == HttpStatus.CREATED) {
-            return SnippetCreationResponseDTO(savedSnippet.id!!, linterRules.body!!, formaterRules.body!!)
+            return SnippetCreationResponseDTO(savedSnippet.toSnippetResponseDTO(), linterRules.body!!, formaterRules.body!!)
         } else {
             snippetRepository.delete(savedSnippet)
             throw HTTPError("Error creating resource", response.statusCode)
@@ -103,7 +131,7 @@ class SnippetServiceImpl : SnippetService {
     }
 
     override fun getSnippetsByOwner(ownerId: String, token: String): List<SnippetResponseDTO> {
-        val roles = rolesService.getResourcesByOwner(token, "snippet")
+        val roles = rolesService.getResourcesByRole(token, "snippet", "owner")
         if (roles.statusCode != HttpStatus.OK) throw HTTPError("Error getting roles", roles.statusCode)
         val snippets = snippetRepository.findAllById(roles.body!!.ids)
         return snippets.map {
