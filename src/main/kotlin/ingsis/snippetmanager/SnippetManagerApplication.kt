@@ -9,5 +9,5 @@ import org.springframework.metrics.export.datadog.EnableDatadogMetrics
 class SnippetManagerApplication
 
 fun main(args: Array<String>) {
-	runApplication<SnippetManagerApplication>(*args)
+    runApplication<SnippetManagerApplication>(*args)
 }

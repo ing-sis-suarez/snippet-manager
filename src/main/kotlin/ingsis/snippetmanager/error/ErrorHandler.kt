@@ -1,11 +1,9 @@
 package ingsis.roles.error
 
 import org.springframework.http.HttpStatus
-
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import java.lang.Error
 
 @ControllerAdvice
 class ErrorHandler {
@@ -27,7 +25,8 @@ class ErrorHandler {
 class HTTPError : Exception {
 
     var status: HttpStatus
-    constructor(message: String, status: HttpStatus) : super(message){
+
+    constructor(message: String, status: HttpStatus) : super(message) {
         this.status = status
     }
 }
