@@ -36,6 +36,7 @@ class RolesServiceImpl : RolesService {
 
     override fun getResourcesByRole(token: String, resourceType: String, role: String): ResponseEntity<IdList> {
         val url = System.getenv("ROLES_URI") + "/resources/$resourceType?role=$role"
+        println(url)
         val template = RestTemplate()
         val headers = HttpHeaders()
         prepareHeaders(headers, token)
