@@ -7,6 +7,7 @@ import ingsis.snippetmanager.domains.lint_rules.service.LinterRulesService
 import ingsis.snippetmanager.domains.model.ComplianceState
 import ingsis.snippetmanager.domains.model.Snippet
 import ingsis.snippetmanager.domains.roles.service.RolesService
+import ingsis.snippetmanager.domains.snippets.dto.SnippetCreationResponseDTO
 import ingsis.snippetmanager.domains.snippets.dto.SnippetDataRequestDTO
 import ingsis.snippetmanager.domains.snippets.dto.SnippetResponseDTO
 import ingsis.snippetmanager.domains.snippets.dto.UpdateSnippetDTO
@@ -54,7 +55,7 @@ class SnippetServiceImpl : SnippetService {
     }
 
 
-    override fun createSnippet(dto: SnippetDataRequestDTO, userId: String, token: String): UUID {
+    override fun createSnippet(dto: SnippetDataRequestDTO, userId: String, token: String): SnippetCreationResponseDTO {
         val linterRules = rolesService.getResourceIfExistsByOwnerAndResourceType("linter_rules", token)
         if (linterRules.statusCode != HttpStatus.OK) linterRulesService.createLinterRules(userId, token)
         val formaterRules = rolesService.getResourceIfExistsByOwnerAndResourceType("formater_rules", token)
@@ -63,7 +64,7 @@ class SnippetServiceImpl : SnippetService {
         val savedSnippet = snippetRepository.save(snippet)
         val response = rolesService.createResource(userId, "snippet", savedSnippet.id!!, token)
         if (response.statusCode == HttpStatus.CREATED) {
-            return savedSnippet.id!!
+            return SnippetCreationResponseDTO(savedSnippet.id!!, linterRules.body!!, formaterRules.body!!)
         } else {
             snippetRepository.delete(savedSnippet)
             throw HTTPError("Error creating resource", response.statusCode)

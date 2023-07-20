@@ -1,5 +1,6 @@
 package ingsis.snippetmanager.domains.snippets.controller
 
+import ingsis.snippetmanager.domains.snippets.dto.SnippetCreationResponseDTO
 import ingsis.snippetmanager.domains.snippets.dto.SnippetDataRequestDTO
 import ingsis.snippetmanager.domains.snippets.dto.SnippetResponseDTO
 import ingsis.snippetmanager.domains.snippets.dto.UpdateSnippetDTO
@@ -28,7 +29,7 @@ class SnippetController {
         @RequestHeader("Authorization") token: String,
         @RequestBody snippet: SnippetDataRequestDTO,
         principal: Principal
-    ): ResponseEntity<UUID> {
+    ): ResponseEntity<SnippetCreationResponseDTO> {
         return ResponseEntity(snippetService.createSnippet(snippet, principal.name, token), HttpStatus.CREATED)
     }
 

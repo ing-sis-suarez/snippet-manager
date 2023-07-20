@@ -22,3 +22,5 @@ data class UpdateSnippetDTO(
     val type: String?,
     val compliance: ComplianceState?
 )
+
+data class SnippetCreationResponseDTO(val snippetId: UUID, val linterRules: UUID, val formaterRules: UUID)

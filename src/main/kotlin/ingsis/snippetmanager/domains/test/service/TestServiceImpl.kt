@@ -92,7 +92,7 @@ class TestServiceImpl: TestService {
     }
 
     private fun runTest(body: TestRunRequestDTO, token: String): TestResultDTO {
-        val url = System.getenv("RUNNER_URL") + "/test"
+        val url = System.getenv("RUNNER_URI") + "/test"
         val template = RestTemplate()
         val httpHeaders = HttpHeaders()
         httpHeaders.set("Content-Type", "application/json")
