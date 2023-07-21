@@ -1,5 +1,6 @@
 package ingsis.snippetmanager.domains.users.service
 
+import ingsis.snippetmanager.domains.users.dto.UserDTO
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -9,7 +10,7 @@ import org.springframework.web.client.RestTemplate
 
 
 @Service
-class UserServiceImpl: UserService {
+class UserServiceImpl : UserService {
     private val AUTH0_DOMAIN = "dev-7qnoj6g0bvw3f2qs.us.auth0.com"
     private val CLIENT_ID = "Pam5Z8KJvrA1k9bczNzgSQuWuvE1qmqe"
     private val CLIENT_SECRET = System.getenv("AUTH0_CLIENT_SECRET")
@@ -31,7 +32,7 @@ class UserServiceImpl: UserService {
         // Make the GET request to the Auth0 Management API to retrieve all users
         val response = restTemplate.exchange(
             apiUrl, HttpMethod.GET, HttpEntity<Any>(headers),
-            String::class.java
+            Array<UserDTO>::class.java
         )
 
         return response.body!!
@@ -56,6 +57,7 @@ class UserServiceImpl: UserService {
             // (In a real application, proper error handling should be implemented here)
             return response.body!!.split("\"".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[3]
         }
+
     override fun findUsers(): Any {
         return getUsers()
     }
