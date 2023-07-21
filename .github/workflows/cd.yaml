@@ -24,8 +24,3 @@ jobs:
       - name: Run script on remote machine
         run: |
           ssh -v -o StrictHostKeyChecking=no jorge@${{ secrets.SSH_HOST_DEV }} "~/deploy.sh"
-          
-  
-
-
-  
