@@ -37,9 +37,9 @@ class Snippet {
     }
 
     fun update(updateDTO: UpdateSnippetDTO) {
-        this.title = updateDTO.name
-        this.content = updateDTO.content
-        this.language = updateDTO.type
+        this.title = updateDTO.name ?: this.title
+        this.content = updateDTO.content ?: this.content
+        this.language = updateDTO.type ?: this.language
         updateDTO.compliance?.let { this.compliance = it }
     }
 
