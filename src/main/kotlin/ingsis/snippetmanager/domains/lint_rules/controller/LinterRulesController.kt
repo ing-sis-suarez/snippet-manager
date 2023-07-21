@@ -72,6 +72,14 @@ class LinterRulesController {
         return newRules
     }
 
+    @GetMapping("/linter_rules")
+    fun getLinterRules(
+        @RequestHeader("Authorization") token: String,
+        principal: Principal
+    ): ResponseEntity<LinterRules> {
+        return ResponseEntity(linterRulesService.getLinterRules(principal.name, token), HttpStatus.OK)
+    }
+
     @PostMapping("/linter_rules/redis")
     suspend fun testRedis(@RequestHeader("Authorization") token: String, principal: Principal): ResponseEntity<Void> {
         lintRequestProducer.publishEvent(LintRequestEvent(UUID.randomUUID(), UUID.randomUUID(), token))

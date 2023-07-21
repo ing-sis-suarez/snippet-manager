@@ -45,6 +45,13 @@ class LinterRulesServiceImpl : LinterRulesService {
             .orElseThrow { HTTPError("Resource not found", HttpStatus.NOT_FOUND) }
     }
 
+    override fun getLinterRules(ownerId: String, token: String): LinterRules {
+        val roles = rolesService.getResourcesByRole(token, "linter_rules", "owner")
+        if (roles.statusCode != HttpStatus.OK) throw HTTPError("Error getting roles", roles.statusCode)
+        return linterRulesRepository.findById(roles.body!!.ids[0])
+            .orElseThrow { HTTPError("Resource not found", HttpStatus.NOT_FOUND) }
+    }
+
     override fun updateLinterRules(ownerId: String, token: String, resourceId: UUID, dto: LinterRulesDTO): LinterRules {
         val roles = rolesService.getRoles(resourceId, token, "linter_rules")
         if (roles.statusCode != HttpStatus.OK) throw HTTPError("Error getting roles", roles.statusCode)
