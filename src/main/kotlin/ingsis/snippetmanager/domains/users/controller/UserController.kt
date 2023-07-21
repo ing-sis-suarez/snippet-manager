@@ -24,8 +24,8 @@ class UserController {
         return userService.findUsers()
     }
 
-    @GetMapping("/hello")
+    @GetMapping("/hellow")
     fun hello(): String {
-        return "Hello World!"
+        return "Hellow"
     }
 }
