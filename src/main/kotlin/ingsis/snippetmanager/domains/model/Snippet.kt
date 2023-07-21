@@ -40,7 +40,7 @@ class Snippet {
         this.title = updateDTO.name ?: this.title
         this.content = updateDTO.content ?: this.content
         this.language = updateDTO.type ?: this.language
-        updateDTO.compliance?.let { this.compliance = it }
+        this.compliance = updateDTO.compliance ?: this.compliance
     }
 
     fun toSnippetResponseDTO(): SnippetResponseDTO {
