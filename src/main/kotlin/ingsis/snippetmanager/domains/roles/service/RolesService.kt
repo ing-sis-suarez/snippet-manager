@@ -20,7 +20,7 @@ interface RolesService {
     fun getResourceIfExistsByOwnerAndResourceType(
         resourceType: String,
         token: String
-    ): ResponseEntity<UUID>
+    ): UUID?
 
     fun deleteResource(resourceId: UUID, token: String): ResponseEntity<Boolean>
 

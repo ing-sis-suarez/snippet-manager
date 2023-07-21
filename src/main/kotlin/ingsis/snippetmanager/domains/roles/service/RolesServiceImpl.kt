@@ -5,7 +5,10 @@ import DeleteResourceRequestDTO
 import UserRolesResponseDTO
 import ingsis.roles.error.HTTPError
 import ingsis.snippetmanager.domains.lint_rules.dto.IdList
-import org.springframework.http.*
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -52,18 +55,16 @@ class RolesServiceImpl : RolesService {
     override fun getResourceIfExistsByOwnerAndResourceType(
         resourceType: String,
         token: String
-    ): ResponseEntity<UUID> {
+    ): UUID? {
         val url = System.getenv("ROLES_URI") + "/resource?resourceType=$resourceType"
         val template = RestTemplate()
         val headers = HttpHeaders()
         prepareHeaders(headers, token)
         val requestEntity = HttpEntity<Void>(headers)
         try {
-            return template.exchange(url, HttpMethod.GET, requestEntity, UUID::class.java)
-        } catch (e: HttpClientErrorException) {
-            if (e.statusCode == HttpStatus.NOT_FOUND) return ResponseEntity(HttpStatus.NOT_FOUND)
-            println(e.message)
-            throw HTTPError(e.message ?: "", e.statusCode)
+            return template.exchange(url, HttpMethod.GET, requestEntity, UUID::class.java).body!!
+        } catch (e: Exception) {
+            return null
         }
     }
 

@@ -48,14 +48,16 @@ class SnippetServiceImpl : SnippetService {
     override fun getAllSnippets(token: String): List<SnippetResponseDTO> {
         val response = rolesService.getResourcesByRole(token, "snippet", "read")
         val snippets = snippetRepository.findAllById(response.body!!.ids)
-        return snippets.map { snippet -> SnippetResponseDTO(
-            snippet.id!!,
-            snippet.title!!,
-            snippet.content!!,
-            snippet.createdAt!!,
-            snippet.language!!,
-            snippet.compliance!!
-        ) }
+        return snippets.map { snippet ->
+            SnippetResponseDTO(
+                snippet.id!!,
+                snippet.title!!,
+                snippet.content!!,
+                snippet.createdAt!!,
+                snippet.language!!,
+                snippet.compliance!!
+            )
+        }
     }
 
     override fun getReadableSnippets(token: String): List<SnippetResponseDTO> {
@@ -63,27 +65,31 @@ class SnippetServiceImpl : SnippetService {
         val owned = rolesService.getResourcesByRole(token, "snippet", "owner").body!!.ids
         val onlyReadable = readable.filter { id -> !owned.contains(id) }
         val snippets = snippetRepository.findAllById(onlyReadable)
-        return snippets.map { snippet -> SnippetResponseDTO(
-            snippet.id!!,
-            snippet.title!!,
-            snippet.content!!,
-            snippet.createdAt!!,
-            snippet.language!!,
-            snippet.compliance!!
-        ) }
+        return snippets.map { snippet ->
+            SnippetResponseDTO(
+                snippet.id!!,
+                snippet.title!!,
+                snippet.content!!,
+                snippet.createdAt!!,
+                snippet.language!!,
+                snippet.compliance!!
+            )
+        }
     }
 
     override fun getOwnedSnippets(token: String): List<SnippetResponseDTO> {
         val response = rolesService.getResourcesByRole(token, "snippet", "owner")
         val snippets = snippetRepository.findAllById(response.body!!.ids)
-        return snippets.map { snippet -> SnippetResponseDTO(
-            snippet.id!!,
-            snippet.title!!,
-            snippet.content!!,
-            snippet.createdAt!!,
-            snippet.language!!,
-            snippet.compliance!!
-        ) }
+        return snippets.map { snippet ->
+            SnippetResponseDTO(
+                snippet.id!!,
+                snippet.title!!,
+                snippet.content!!,
+                snippet.createdAt!!,
+                snippet.language!!,
+                snippet.compliance!!
+            )
+        }
     }
 
     override fun setAllToPending(ids: List<UUID>) {
@@ -97,15 +103,19 @@ class SnippetServiceImpl : SnippetService {
 
 
     override fun createSnippet(dto: SnippetDataRequestDTO, userId: String, token: String): SnippetCreationResponseDTO {
-        val linterRules = rolesService.getResourceIfExistsByOwnerAndResourceType("linter_rules", token)
-        if (linterRules.statusCode != HttpStatus.OK) linterRulesService.createLinterRules(userId, token)
-        val formaterRules = rolesService.getResourceIfExistsByOwnerAndResourceType("formater_rules", token)
-        if (formaterRules.statusCode != HttpStatus.OK) formaterRulesService.createFormaterRules(userId, token)
+        var linterRules = rolesService.getResourceIfExistsByOwnerAndResourceType("linter_rules", token)
+        if (linterRules == null) {
+            linterRules = linterRulesService.createLinterRules(userId, token).id!!
+        }
+        var formaterRules = rolesService.getResourceIfExistsByOwnerAndResourceType("formater_rules", token)
+        if (formaterRules == null) {
+            formaterRules = formaterRulesService.createFormaterRules(userId, token).id!!
+        }
         val snippet = Snippet(dto)
         val savedSnippet = snippetRepository.save(snippet)
         val response = rolesService.createResource(userId, "snippet", savedSnippet.id!!, token)
         if (response.statusCode == HttpStatus.CREATED) {
-            return SnippetCreationResponseDTO(savedSnippet.toSnippetResponseDTO(), linterRules.body!!, formaterRules.body!!)
+            return SnippetCreationResponseDTO(savedSnippet.toSnippetResponseDTO(), linterRules!!, formaterRules!!)
         } else {
             snippetRepository.delete(savedSnippet)
             throw HTTPError("Error creating resource", response.statusCode)
