@@ -1,16 +1,22 @@
+package ingsis.snippetmanager.domains.users.service
+
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
+import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
-object Auth0UserQuery {
+
+@Service
+class UserServiceImpl: UserService {
     private val AUTH0_DOMAIN = "dev-7qnoj6g0bvw3f2qs.us.auth0.com"
     private val CLIENT_ID = "Pam5Z8KJvrA1k9bczNzgSQuWuvE1qmqe"
     private val CLIENT_SECRET = System.getenv("AUTH0_CLIENT_SECRET")
     private val API_AUDIENCE = "https://" + AUTH0_DOMAIN + "/api/v2/"
-    @JvmStatic
-    fun main(args: Array<String>) {
+
+
+    fun getUsers(): Any {
         // Set up the RestTemplate
         val restTemplate = RestTemplate()
 
@@ -27,6 +33,8 @@ object Auth0UserQuery {
             apiUrl, HttpMethod.GET, HttpEntity<Any>(headers),
             String::class.java
         )
+
+        return response.body!!
     }
 
     private val accessToken: String
@@ -48,4 +56,7 @@ object Auth0UserQuery {
             // (In a real application, proper error handling should be implemented here)
             return response.body!!.split("\"".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[3]
         }
+    override fun findUsers(): Any {
+        return getUsers()
+    }
 }
