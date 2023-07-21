@@ -45,6 +45,19 @@ class SnippetServiceImpl : SnippetService {
         this.formaterRulesService = formaterRulesService
     }
 
+    override fun getAllSnippets(token: String): List<SnippetResponseDTO> {
+        val response = rolesService.getResourcesByRole(token, "snippet", "read")
+        val snippets = snippetRepository.findAllById(response.body!!.ids)
+        return snippets.map { snippet -> SnippetResponseDTO(
+            snippet.id!!,
+            snippet.title!!,
+            snippet.content!!,
+            snippet.createdAt!!,
+            snippet.language!!,
+            snippet.compliance!!
+        ) }
+    }
+
     override fun getReadableSnippets(token: String): List<SnippetResponseDTO> {
         val readable = rolesService.getResourcesByRole(token, "snippet", "read").body!!.ids
         val owned = rolesService.getResourcesByRole(token, "snippet", "owner").body!!.ids

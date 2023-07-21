@@ -37,6 +37,13 @@ class FormaterRulesServiceImpl : FormaterRulesService {
         return savedRules
     }
 
+    override fun getFormaterRules(ownerId: String, token: String): FormaterRules {
+        val roles = rolesService.getResourcesByRole(token, "formater_rules", "owner")
+        if (roles.statusCode != HttpStatus.OK) throw HTTPError("Error getting roles", roles.statusCode)
+        return formaterRulesRepository.findById(roles.body!!.ids[0])
+            .orElseThrow { HTTPError("Resource not found", HttpStatus.NOT_FOUND) }
+    }
+
     override fun getFormaterRules(ownerId: String, token: String, resourceId: UUID): FormaterRules {
         val roles = rolesService.getRoles(resourceId, token, "formater_rules")
         if (roles.statusCode != HttpStatus.OK) throw HTTPError("Error getting roles", roles.statusCode)

@@ -6,6 +6,7 @@ import java.util.*
 
 interface FormaterRulesService {
 
+    fun getFormaterRules(ownerId: String, token: String): FormaterRules
     fun createFormaterRules(ownerId: String, token: String): FormaterRules
     fun getFormaterRules(ownerId: String, token: String, resourceId: UUID): FormaterRules
     fun updateFormaterRules(ownerId: String, token: String, resourceId: UUID, dto: FormaterRulesDTO): FormaterRules

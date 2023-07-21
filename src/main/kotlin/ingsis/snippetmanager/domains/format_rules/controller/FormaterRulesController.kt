@@ -5,6 +5,7 @@ import ingsis.snippetmanager.domains.format_rules.producer.FormatRequestEvent
 import ingsis.snippetmanager.domains.format_rules.producer.FormatRequestProducer
 import ingsis.snippetmanager.domains.format_rules.service.FormaterRulesService
 import ingsis.snippetmanager.domains.model.FormaterRules
+import ingsis.snippetmanager.domains.model.LinterRules
 import ingsis.snippetmanager.domains.snippets.service.SnippetService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -72,6 +73,15 @@ class FormaterRulesController {
             formatRequestProducer.publishEvent(FormatRequestEvent(it.id, id, token))
         }
         return newRules
+    }
+
+
+    @GetMapping("/formater_rules")
+    fun getLinterRules(
+        @RequestHeader("Authorization") token: String,
+        principal: Principal
+    ): ResponseEntity<FormaterRules> {
+        return ResponseEntity(formaterRulesService.getFormaterRules(principal.name, token), HttpStatus.OK)
     }
 
     @PostMapping("/formater_rules/redis")
